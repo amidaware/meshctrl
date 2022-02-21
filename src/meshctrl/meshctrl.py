@@ -1,5 +1,4 @@
 import json
-import uuid
 import websockets
 import asyncio
 
@@ -14,23 +13,21 @@ class MeshCtrl():
 
     async def _websocket_call(self, data: dict) -> dict:
         token = utils.get_auth_token(self.user, self.token)
-
         uri = f"{self.uri}/control.ashx?auth={token}"
 
         async with websockets.connect(uri) as websocket:
-            
-            response_id = str(uuid.uuid4())
-            data["responseid"] = response_id
-
-            await websocket.send(
-                json.dumps(data)
-            )
+            await websocket.send(json.dumps(data))
 
             async for message in websocket:
                 response = json.loads(message)
+                #print(response)
 
-                if response["responseId"] == response_id:
-                    return response
+                if "responseid" in data:
+                    if data["responseid"] == response["responseid"]:
+                        return response
+                else:
+                    if data["action"] == response["action"]:
+                        return response
 
     def _send(self, data):
         return asyncio.run(self._websocket_call(data))
@@ -50,6 +47,7 @@ class MeshCtrl():
             "action": "createmesh",
             "meshname": name,
             "meshtype": 2,
+            "responseid": utils.gen_response_id()
         }
 
         return self._send(data)
@@ -62,6 +60,7 @@ class MeshCtrl():
             "nodeids": [f"node//{utils.b64_to_hex(node_id)}"],
             "runAsUser": runAsUser,
             "type": 1,
+            "responseid": utils.gen_response_id()
         }
 
         return self._send(data)
