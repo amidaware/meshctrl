@@ -15,7 +15,7 @@ class MeshCtrl():
     async def _websocket_call(self, data: dict) -> dict:
         token = utils.get_auth_token(self.user, self.token)
 
-        uri = f"{uri}/control.ashx?auth={token}"
+        uri = f"{self.uri}/control.ashx?auth={token}"
 
         async with websockets.connect(uri) as websocket:
             
