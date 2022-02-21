@@ -1,9 +1,9 @@
 import json
 import uuid
 import websockets
+import asyncio
 
 import meshctrl
-
 class MeshCtrl():
 
     def __init__(self, uri: str, token: str, user: str):
@@ -31,13 +31,19 @@ class MeshCtrl():
                 if response["responseId"] == responseId:
                     return response
 
+    def _send(self, data):
+        loop = asyncio.get_event_loop()
+        result = loop.run_until_complete(self._websocket_call(json.dumps(data)))
+        loop.close()
+        return result
+
     # pulls a list of groups in MeshCentral
     def get_mesh_groups(self) -> dict:
         data = {
             "action": "meshes"
         }
 
-        return self._websocket_call(json.dumps(data))
+        return self._send(data)
 
 
     # created a group with the specified name
@@ -48,7 +54,7 @@ class MeshCtrl():
             "meshtype": 2,
         }
 
-        return self._websocket_call(json.dumps(data))
+        return self._send(data)
 
     # run command on an agent
     def run_command(self, node_id: str, command: str, runAsUser: int = 0) -> dict:
@@ -60,4 +66,4 @@ class MeshCtrl():
             "type": 1,
         }
 
-        return self._websocket_call(json.dumps(data))
+        return self._send(data)

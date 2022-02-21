@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='meshctrl-py',
-    version='0.1.0',    
+    name='meshctrl',
+    version='0.1.3',    
     description='Python port of MeshCentral\'s Meshctrl.js program',
     long_description=long_description,
     long_description_content_type="text/markdown",
