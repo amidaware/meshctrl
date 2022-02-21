@@ -1,1 +1,1 @@
-from meshctrl.meshctrl import MeshCtrl
+from .meshctrl import MeshCtrl

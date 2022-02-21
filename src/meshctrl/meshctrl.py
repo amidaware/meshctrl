@@ -3,7 +3,8 @@ import uuid
 import websockets
 import asyncio
 
-import meshctrl
+from . import utils
+
 class MeshCtrl():
 
     def __init__(self, uri: str, token: str, user: str):
@@ -12,7 +13,7 @@ class MeshCtrl():
         self.token = token
 
     async def _websocket_call(self, data: dict) -> dict:
-        token = meshctrl.utils.get_auth_token(self.user, self.token)
+        token = utils.get_auth_token(self.user, self.token)
 
         uri = f"{uri}/control.ashx?auth={token}"
 
@@ -61,7 +62,7 @@ class MeshCtrl():
         data =                     {
             "action": "runcommands",
             "cmds": command,
-            "nodeids": [f"node//{meshctrl.utils.b64_to_hex(node_id)}"],
+            "nodeids": [f"node//{utils.b64_to_hex(node_id)}"],
             "runAsUser": runAsUser,
             "type": 1,
         }
