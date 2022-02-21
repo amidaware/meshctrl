@@ -19,8 +19,8 @@ class MeshCtrl():
 
         async with websockets.connect(uri) as websocket:
             
-            responseId = uuid.uuid4()
-            data["responseId"] = responseId
+            response_id = str(uuid.uuid4())
+            data["responseid"] = response_id
 
             await websocket.send(
                 json.dumps(data)
@@ -29,14 +29,11 @@ class MeshCtrl():
             async for message in websocket:
                 response = json.loads(message)
 
-                if response["responseId"] == responseId:
+                if response["responseId"] == response_id:
                     return response
 
     def _send(self, data):
-        loop = asyncio.get_event_loop()
-        result = loop.run_until_complete(self._websocket_call(json.dumps(data)))
-        loop.close()
-        return result
+        return asyncio.run(self._websocket_call(data))
 
     # pulls a list of groups in MeshCentral
     def get_mesh_groups(self) -> dict:

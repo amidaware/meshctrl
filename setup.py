@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='meshctrl',
-    version='0.1.7',    
+    version='0.1.8',    
     description='Python port of MeshCentral\'s Meshctrl.js program',
     long_description=long_description,
     long_description_content_type="text/markdown",
