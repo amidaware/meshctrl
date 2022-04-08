@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="meshctrl",
-    version="0.1.12",
+    version="0.1.13",
     description="Python port of MeshCentral's Meshctrl.js program",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -13,7 +13,7 @@ setuptools.setup(
     author="Josh Krawczyk",
     author_email="josh@torchlake.com",
     license="MIT",
-    install_requires=["websockets==10.2", "pycryptodome==3.14.1"],
+    install_requires=["websockets>=10.2", "pycryptodome>=3.14.1"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
