@@ -95,7 +95,7 @@ def devicegroup_permissions_str_to_int(perms: str) -> int:
         rights |= 4
     if "remotecontrol" in perms:
         rights |= 8
-    if "agentconsole" in perms: 
+    if "agentconsole" in perms:
         rights |= 16
     if "serverfiles" in perms:
         rights |= 32
@@ -108,8 +108,8 @@ def devicegroup_permissions_str_to_int(perms: str) -> int:
     if "noterminal" in perms:
         rights |= 512
     if "nofiles" in perms:
-         rights |= 1024
-    if "noamt"  in perms:
+        rights |= 1024
+    if "noamt" in perms:
         rights |= 2048
     if "limiteddesktop" in perms:
         rights |= 4096
@@ -143,13 +143,17 @@ def format_devicegroup_id(group: str, domain="") -> str:
     else:
         return group
 
+
 def format_node_id(node: str, domain="") -> str:
     if "node/" not in node:
         return f"node/{domain}/{node}"
     else:
         return node
 
-def parse_and_search_nodes(nodes: List[Dict], filter: str, device_groups: Dict) -> List[Dict]:
+
+def parse_and_search_nodes(
+    nodes: List[Dict], filter: str, device_groups: Dict
+) -> List[Dict]:
     results = []
     filters = filter.split(" or ")
     for f in filters:
@@ -160,7 +164,9 @@ def parse_and_search_nodes(nodes: List[Dict], filter: str, device_groups: Dict) 
             results = [node for node in or_results if node in results]
 
 
-def parse_search_and_input(nodes: List[Dict], f: str, device_groups: Dict) -> List[Dict]:
+def parse_search_and_input(
+    nodes: List[Dict], f: str, device_groups: Dict
+) -> List[Dict]:
     filters = filter.split(" and ")
     results = []
     for f in filters:
@@ -171,7 +177,10 @@ def parse_search_and_input(nodes: List[Dict], f: str, device_groups: Dict) -> Li
             results = [node for node in and_results if node in results]
     return results
 
-def filter_devices_by_filter(nodes: List[Dict], f: str, device_groups: Dict) -> List[Dict]:
+
+def filter_devices_by_filter(
+    nodes: List[Dict], f: str, device_groups: Dict
+) -> List[Dict]:
     results = []
     user_search = f[5:] if f.startsWith("user:".lower()) else None
     user_search = f[2:] if f.startsWith("u:".lower()) else None
@@ -195,35 +204,85 @@ def filter_devices_by_filter(nodes: List[Dict], f: str, device_groups: Dict) -> 
         wsc_search = 4
     elif f == "wsc:any":
         wsc_search = 5
-    
+
     if f == "":
         results = nodes
     elif ip_search:
         results = [node for node in nodes if node["ip"] and ip_search in node["ip"]]
     elif group_search:
         if device_groups:
-            results = [node for node in nodes if group_search in device_groups[node["meshid"]].name]
+            results = [
+                node
+                for node in nodes
+                if group_search in device_groups[node["meshid"]].name
+            ]
     elif tag_search or tag_search == "":
-        results = [node for node in nodes if ((node["agent"] and not node["agent"]["tag"]) and tag_search == "") or (node["agent"] and node["agent"]["tag"] and node["agent"]["tag"].lower() in tag_search)]
+        results = [
+            node
+            for node in nodes
+            if ((node["agent"] and not node["agent"]["tag"]) and tag_search == "")
+            or (
+                node["agent"]
+                and node["agent"]["tag"]
+                and node["agent"]["tag"].lower() in tag_search
+            )
+        ]
     elif agent_tag_search or agent_tag_search == "":
-        results = [node for node in nodes if (node["agent"] and node["agent"]["tag"] and agent_tag_search == "") or (node["agent"] and node["agent"]["tag"] and node["agent"]["tag"].lower() in agent_tag_search)]
+        results = [
+            node
+            for node in nodes
+            if (node["agent"] and node["agent"]["tag"] and agent_tag_search == "")
+            or (
+                node["agent"]
+                and node["agent"]["tag"]
+                and node["agent"]["tag"].lower() in agent_tag_search
+            )
+        ]
     elif user_search:
-        results = [node for node in nodes if node["users"] and user_search in node["users"]]
+        results = [
+            node for node in nodes if node["users"] and user_search in node["users"]
+        ]
     elif os_search:
-        results = [node for node in nodes if node["osdesc"] and os_search in node["osdesc"].lower()]
+        results = [
+            node
+            for node in nodes
+            if node["osdesc"] and os_search in node["osdesc"].lower()
+        ]
     elif amt_search or amt_search == "":
-        results = [node for node in nodes if (node["intelamt"] and amt_search == "") or node["intelamt"]["state"] == amt_search]
+        results = [
+            node
+            for node in nodes
+            if (node["intelamt"] and amt_search == "")
+            or node["intelamt"]["state"] == amt_search
+        ]
     elif desc_search or desc_search == "":
-        results = [node for node in nodes if ("desc" in node["desc"].keys() and node["desc"] != "" and (desc_search == "" or desc_search in node["desc"]))]
+        results = [
+            node
+            for node in nodes
+            if (
+                "desc" in node["desc"].keys()
+                and node["desc"] != ""
+                and (desc_search == "" or desc_search in node["desc"])
+            )
+        ]
     elif wsc_search:
         for node in nodes:
-            if wsc_search == 1 and node["wsc"]["antiVirus"] == "OK" and node["wsc"]["autoUpdate"] == "OK" and node["wsc"]["firewall"] == "OK":
+            if (
+                wsc_search == 1
+                and node["wsc"]["antiVirus"] == "OK"
+                and node["wsc"]["autoUpdate"] == "OK"
+                and node["wsc"]["firewall"] == "OK"
+            ):
                 results.append(node)
-            elif (wsc_search == 2 or wsc_search == 5) and (node["wsc"]["antiVirus"] != "OK"):
+            elif (wsc_search == 2 or wsc_search == 5) and (
+                node["wsc"]["antiVirus"] != "OK"
+            ):
                 results.append(node)
             elif (wsc_search == 3 or wsc_search == 5) and (node["autoUpdate" != "OK"]):
                 results.append(node)
-            elif (wsc_search == 4 or wsc_search == 5) and (node["wsc"]["firewall"] != "OK"):
+            elif (wsc_search == 4 or wsc_search == 5) and (
+                node["wsc"]["firewall"] != "OK"
+            ):
                 results.append(node)
     else:
         regex = re.compile("|".join(re.split(r"/\s+/", f)))

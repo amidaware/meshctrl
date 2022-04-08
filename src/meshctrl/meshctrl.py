@@ -12,6 +12,7 @@ class MeshCtrl:
         url: A url string used to connect to the MeshCentral instance.
         headers: An optional set of headers to pass to websocket client.
     """
+
     # TODO: allow getting token in a file
     def __init__(
         self,
@@ -115,35 +116,33 @@ class MeshCtrl:
         Returns:
             Dict:
                 Returns server info.
-            
+
             Example:
                 {
-                    'domain': '', 
-                    'name': 'mesh.example.com', 
-                    'mpsname': 'mesh.example.com', 
-                    'mpsport': 4433, 
-                    'port': 4443, 
-                    'emailcheck': True, 
-                    'domainauth': False, 
-                    'serverTime': 1645560067270, 
-                    'features': 9607777, 
-                    'features2': 16513, 
-                    'languages': ['en', 'cs', 'da', 'de', 'es', 'fi', 'fr', 'hi', 'it', 'ja', 'ko', 'nl', 'nn', 'pl', 'pt-br', 'pt', 'ru', 'sv', 'tr', 'zh-chs', 'zh-cht'], 
-                    'tlshash': '16D462CC0D306CFC7F242382A1606E2A57E6481B4EAAC7E5C6D91EFA306F9CABD0CD91566A8A35C3DA9580E1F51CF985', 
-                    'agentCertHash': 'V7IZUeuuIWMCY8e1SIb8fKqM1RkS4fUmCbCZzi4cMMzHAi3EJPi9Y8CP5XQfz2tZ', 
-                    'https': True, 
-                    'redirport': 8080, 
-                    'magenturl': 'mc://mesh.example.com:4443', 
-                    'domainsuffix': '', 
+                    'domain': '',
+                    'name': 'mesh.example.com',
+                    'mpsname': 'mesh.example.com',
+                    'mpsport': 4433,
+                    'port': 4443,
+                    'emailcheck': True,
+                    'domainauth': False,
+                    'serverTime': 1645560067270,
+                    'features': 9607777,
+                    'features2': 16513,
+                    'languages': ['en', 'cs', 'da', 'de', 'es', 'fi', 'fr', 'hi', 'it', 'ja', 'ko', 'nl', 'nn', 'pl', 'pt-br', 'pt', 'ru', 'sv', 'tr', 'zh-chs', 'zh-cht'],
+                    'tlshash': '16D462CC0D306CFC7F242382A1606E2A57E6481B4EAAC7E5C6D91EFA306F9CABD0CD91566A8A35C3DA9580E1F51CF985',
+                    'agentCertHash': 'V7IZUeuuIWMCY8e1SIb8fKqM1RkS4fUmCbCZzi4cMMzHAi3EJPi9Y8CP5XQfz2tZ',
+                    'https': True,
+                    'redirport': 8080,
+                    'magenturl': 'mc://mesh.example.com:4443',
+                    'domainsuffix': '',
                     'certExpire': 1652972190000
                 }
         """
 
-        data = {
-            "action": "serverinfo"
-        }
+        data = {"action": "serverinfo"}
 
-        return self._send(data)["serverinfo"] 
+        return self._send(data)["serverinfo"]
 
     def user_info(self) -> Dict:
         """Gets logged on user info.
@@ -154,29 +153,27 @@ class MeshCtrl:
 
             Example:
                 {
-                    '_id': 'user//username', 
-                    'name': 'username', 
-                    'creation': 1643754241, 
+                    '_id': 'user//username',
+                    'name': 'username',
+                    'creation': 1643754241,
                     'links': {
                         'mesh//oAUeYE3HCqUFXWCkqwqfW@ElJ7orX6hrNv$r$RyCEsVgtUQNxYC6dLs4jlfQNTPA': {
                             'rights': 4294967295
-                        }, 
+                        },
                         'mesh//$lhtFH8ZYcVEZYSqLx1O2vxqgSdzX9bjZLAbmRMz3lJ@XLulbyhqeRUPF4MbaN64': {
                             'rights': 4294967295
                         }
-                    }, 
-                    'email': 'example@example.com', 
-                    'emailVerified': True, 
-                    'siteadmin': 4294967295, 
-                    'pastlogin': 1645505345, 
-                    'access': 1645558617, 
+                    },
+                    'email': 'example@example.com',
+                    'emailVerified': True,
+                    'siteadmin': 4294967295,
+                    'pastlogin': 1645505345,
+                    'access': 1645558617,
                     'login': 1645505346
                 }
         """
 
-        data = {
-            "action": "userinfo"
-        }
+        data = {"action": "userinfo"}
 
         return self._send(data)["userinfo"]
 
@@ -189,10 +186,10 @@ class MeshCtrl:
 
             Example:
                 {'user//tactical': 1}
-        """     
+        """
 
         data = {
-            "action": "wssessioncount",  
+            "action": "wssessioncount",
         }
 
         return self._send(data)["wssessions"]
@@ -494,9 +491,7 @@ class MeshCtrl:
             List[Dict]: Mesh user accounts.
         """
 
-        data = {
-            "action": "users"
-        }
+        data = {"action": "users"}
 
         return self._send(data)["users"]
 
@@ -701,16 +696,16 @@ class MeshCtrl:
             List[Dict] or Dict: Mesh user groups.
         """
 
-        data = {
-            "action": "usergroups"
-        }
+        data = {"action": "usergroups"}
 
         if json:
             return self._send(data)["ugroups"]
         else:
             return [group for group in self._send(data)["ugroups"].values()]
 
-    def add_user_group(self, name: str, desc: Optional[str] = None, domain: Optional[str] = None) -> Dict:
+    def add_user_group(
+        self, name: str, desc: Optional[str] = None, domain: Optional[str] = None
+    ) -> Dict:
         """Add user group
 
         Args:
@@ -726,10 +721,10 @@ class MeshCtrl:
 
             Example:
             {
-                'action': 'createusergroup', 
-                'responseid': '26100a76-0057-459d-9881-acf5fe357883', 
-                'result': 'ok', 
-                'ugrpid': 'ugrp//4nGnRRX@Ii9sL29TSYomnsZtRgDGKInE0d43HGsGposFtMwkBtxvYtsT6rX2XtdB', 
+                'action': 'createusergroup',
+                'responseid': '26100a76-0057-459d-9881-acf5fe357883',
+                'result': 'ok',
+                'ugrpid': 'ugrp//4nGnRRX@Ii9sL29TSYomnsZtRgDGKInE0d43HGsGposFtMwkBtxvYtsT6rX2XtdB',
                 'links': {}
             }
         """
@@ -761,9 +756,9 @@ class MeshCtrl:
 
             Example:
                 {
-                    'action': 'deleteusergroup', 
-                    'responseid': '9f131710-2548-4607-ad7b-a1c2814c1c5c', 
-                    'result': 'ok', 
+                    'action': 'deleteusergroup',
+                    'responseid': '9f131710-2548-4607-ad7b-a1c2814c1c5c',
+                    'result': 'ok',
                     'ugrpid': 'ugrp//HR5E2E9ax5hc$FD9hSFQKI7mKiknUjXy5r3Q$don5iOa2fMDTU0AwnsHCC8KHkNX'
                 }
         """
@@ -776,7 +771,9 @@ class MeshCtrl:
 
         return self._send(data)
 
-    def add_to_user_group(self, group_id: str, id: str, domain: str = "", rights: Optional[int] = 0) -> Dict:
+    def add_to_user_group(
+        self, group_id: str, id: str, domain: str = "", rights: Optional[int] = 0
+    ) -> Dict:
         """Add to user group
 
         Add a user, device or device group to a user group.
@@ -801,17 +798,17 @@ class MeshCtrl:
                     - 4096 = Desktop Limited Input         8192 = Limit Events
                     - 16384 = Chat / Notify                32768 = Uninstall Agent
                     - 65536 = No Remote Desktop            131072 = Remote Commands
-                    - 262144 = Reset / Power off 
+                    - 262144 = Reset / Power off
 
         Returns:
             Dict: Returns confirmation that the user, device, or device group was added to user group.
 
             Example:
                 {
-                    'action': 'addusertousergroup', 
-                    'responseid': 'aa09cc76-70f2-47b1-b680-92d4e363eaab', 
-                    'result': 'ok', 
-                    'added': 1, 
+                    'action': 'addusertousergroup',
+                    'responseid': 'aa09cc76-70f2-47b1-b680-92d4e363eaab',
+                    'result': 'ok',
+                    'added': 1,
                     'failed': 0
                 }
         """
@@ -837,9 +834,11 @@ class MeshCtrl:
             data["userids"] = [utils.format_usergroup_id(group_id, domain)]
             data["meshadmin"] = rights
         else:
-            raise ValueError("The id is incorrect. Must start with mesh//, user//, or node//.")
+            raise ValueError(
+                "The id is incorrect. Must start with mesh//, user//, or node//."
+            )
 
-        return self._send(data)    
+        return self._send(data)
 
     def remove_from_user_group(self, group_id: str, id: str, domain: str = "") -> Dict:
         """Remove from user group
@@ -860,8 +859,8 @@ class MeshCtrl:
 
             Example:
                 {
-                    'action': 'removeuserfromusergroup', 
-                    'responseid': '65243852-4480-400c-baae-d48ca313164e', 
+                    'action': 'removeuserfromusergroup',
+                    'responseid': '65243852-4480-400c-baae-d48ca313164e',
                     'result': 'ok'
                 }
         """
@@ -889,12 +888,14 @@ class MeshCtrl:
         else:
             raise ValueError("id must start with user/, mesh/, or node/")
 
-        return self._send(data)   
+        return self._send(data)
 
-    def move_to_device_group(self, group_id: str, dev_id: str, domain: str = "") -> Dict:
+    def move_to_device_group(
+        self, group_id: str, dev_id: str, domain: str = ""
+    ) -> Dict:
         """Move node to new device group
 
-        Group_id can be the group name or full id. 
+        Group_id can be the group name or full id.
 
         Args:
             group_id (str):
@@ -912,12 +913,14 @@ class MeshCtrl:
             "action": "changeDeviceMesh",
             "responseid": utils.gen_response_id(),
             "nodeids": [utils.format_node_id(dev_id)],
-            "meshid": utils.format_devicegroup_id(group_id, domain)
+            "meshid": utils.format_devicegroup_id(group_id, domain),
         }
 
-        return self._send(data) 
+        return self._send(data)
 
-    def add_user_to_device_group(self, group_id: str, user_id: str, domain: str = "", rights: Optional[int] = 0) -> Dict:
+    def add_user_to_device_group(
+        self, group_id: str, user_id: str, domain: str = "", rights: Optional[int] = 0
+    ) -> Dict:
         """Add user to device group
 
         Args:
@@ -939,7 +942,7 @@ class MeshCtrl:
                     - 4096 = Desktop Limited Input         8192 = Limit Events
                     - 16384 = Chat / Notify                32768 = Uninstall Agent
                     - 65536 = No Remote Desktop            131072 = Remote Commands
-                    - 262144 = Reset / Power off 
+                    - 262144 = Reset / Power off
 
         Returns:
             Dict: Returns confirmation that the user was added to device group.
@@ -950,12 +953,14 @@ class MeshCtrl:
             "responseid": utils.gen_response_id(),
             "usernames": [utils.format_user_id(user_id, domain)],
             "meshadmin": rights,
-            "meshid": utils.format_devicegroup_id(group_id, domain)
+            "meshid": utils.format_devicegroup_id(group_id, domain),
         }
 
-        return self._send(data) 
+        return self._send(data)
 
-    def remove_user_from_device_group(self, group_id: str, user_id: str, domain: str = "") -> Dict:
+    def remove_user_from_device_group(
+        self, group_id: str, user_id: str, domain: str = ""
+    ) -> Dict:
         """Remove user from device group
 
         Args:
@@ -974,12 +979,14 @@ class MeshCtrl:
             "action": "removemeshuser",
             "responseid": utils.gen_response_id(),
             "usernames": [utils.format_user_id(user_id, domain)],
-            "meshid": utils.format_devicegroup_id(group_id, domain)
+            "meshid": utils.format_devicegroup_id(group_id, domain),
         }
 
-        return self._send(data) 
+        return self._send(data)
 
-    def add_user_to_device(self, node_id: str, user_id: str, domain: str = "", rights: Optional[int] = 0) -> Dict:
+    def add_user_to_device(
+        self, node_id: str, user_id: str, domain: str = "", rights: Optional[int] = 0
+    ) -> Dict:
         """Add user to device
 
         Args:
@@ -1001,7 +1008,7 @@ class MeshCtrl:
                     - 4096 = Desktop Limited Input         8192 = Limit Events
                     - 16384 = Chat / Notify                32768 = Uninstall Agent
                     - 65536 = No Remote Desktop            131072 = Remote Commands
-                    - 262144 = Reset / Power off 
+                    - 262144 = Reset / Power off
 
         Returns:
             Dict: Returns confirmation that the user was added to device.
@@ -1012,12 +1019,14 @@ class MeshCtrl:
             "responseid": utils.gen_response_id(),
             "usernames": [utils.format_user_id(user_id, domain)],
             "nodeid": utils.format_node_id(node_id, domain),
-            "rights": rights
+            "rights": rights,
         }
 
-        return self._send(data) 
+        return self._send(data)
 
-    def remove_user_from_device(self, node_id: str, user_id: str, domain: str = "") -> Dict:
+    def remove_user_from_device(
+        self, node_id: str, user_id: str, domain: str = ""
+    ) -> Dict:
         """Add user to device
 
         Args:
@@ -1041,9 +1050,18 @@ class MeshCtrl:
             "remove": True,
         }
 
-        return self._send(data) 
-    
-    def list_devices(self, group_id: Optional[str] = None, domain: str = "", count: bool = False, details: bool = False, json: bool = False, filter: Optional[str] = None, filter_ids: Optional[List[str]] = None) -> Union[List[Dict], int, Dict]:
+        return self._send(data)
+
+    def list_devices(
+        self,
+        group_id: Optional[str] = None,
+        domain: str = "",
+        count: bool = False,
+        details: bool = False,
+        json: bool = False,
+        filter: Optional[str] = None,
+        filter_ids: Optional[List[str]] = None,
+    ) -> Union[List[Dict], int, Dict]:
         """List devices
 
         List all devices or filter by a device group or filter by other properties
@@ -1093,17 +1111,23 @@ class MeshCtrl:
 
         if group_id:
             data["meshid"] = utils.format_devicegroup_id(group_id, domain)
-        
+
         nodes = self._send(data)["nodes"]
-        
+
         if filter_ids:
             for meshid in nodes:
-                nodes[meshid] = [node for node in nodes[meshid] if node._id.split("/")[-1] in filter_ids]
-        
+                nodes[meshid] = [
+                    node
+                    for node in nodes[meshid]
+                    if node._id.split("/")[-1] in filter_ids
+                ]
+
         if filter:
             for meshid in nodes:
-                nodes[meshid] = utils.parse_and_search_nodes(nodes, filter, device_groups=self.list_device_groups())
-        
+                nodes[meshid] = utils.parse_and_search_nodes(
+                    nodes, filter, device_groups=self.list_device_groups()
+                )
+
         if count:
             return len([node for sublist in nodes.values() for node in list])
         elif json:
@@ -1121,24 +1145,24 @@ class MeshCtrl:
         Returns:
             Dict: Returns information about the device
         """
-        
-        raise NotImplementedError() 
+
+        raise NotImplementedError()
 
     def list_events(self):
         # TODO
-        raise NotImplementedError() 
+        raise NotImplementedError()
 
     def list_login_tokens(self):
         # TODO
-        raise NotImplementedError() 
+        raise NotImplementedError()
 
     def add_login_token(self):
         # TODO
-        raise NotImplementedError() 
+        raise NotImplementedError()
 
     def remove_login_token(self):
         # TODO
-        raise NotImplementedError() 
+        raise NotImplementedError()
 
     def broadcast_message(self):
         # TODO

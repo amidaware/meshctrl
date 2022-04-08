@@ -1,0 +1,14 @@
+{
+    "python.defaultInterpreterPath": "env/bin/python",
+    "python.languageServer": "Pylance",
+    "python.analysis.extraPaths": [
+        "env"
+    ],
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportUnusedImport": "error",
+        "reportDuplicateImport": "error",
+    },
+    "python.analysis.typeCheckingMode": "basic",
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+}

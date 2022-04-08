@@ -19,3 +19,4 @@ share/python-wheels/
 MANIFEST
 
 __pycache__/
+env/
