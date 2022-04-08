@@ -125,9 +125,9 @@ def devicegroup_permissions_str_to_int(perms: str) -> int:
 
 def format_user_id(username: str, domain="") -> str:
     if "user/" not in username:
-        return f"user/{domain}/{username}"
+        return f"user/{domain}/{username.lower()}"
     else:
-        return username
+        return username.lower()
 
 
 def format_usergroup_id(group: str, domain="") -> str:
