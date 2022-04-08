@@ -13,7 +13,7 @@ setuptools.setup(
     author="Josh Krawczyk",
     author_email="josh@torchlake.com",
     license="MIT",
-    install_requires=["websockets", "pycryptodome"],
+    install_requires=["websockets==10.2", "pycryptodome==3.14.1"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
