@@ -1,5 +1,6 @@
 import time
 import uuid
+import base64
 from base64 import b64encode
 import random
 import string
@@ -7,7 +8,9 @@ import re
 from typing import Dict, List, Optional
 
 from Crypto.Cipher import AES
+from Crypto.Hash import SHA3_384
 from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad
 
 
 def get_pwd_auth(username: str, password: str, token: str = None) -> str:
@@ -27,6 +30,30 @@ def get_auth_token(user: str, key: str, domain: str = "") -> str:
     msg, tag = a.encrypt_and_digest(bytes(msg, "utf-8"))
 
     return b64encode(iv + tag + msg, altchars=b"@$").decode("utf-8")
+
+
+def get_login_token(self, key, user, action=3):
+    try:
+        key = bytes.fromhex(key)
+        key1 = key[0:48]
+        key2 = key[48:]
+        msg = '{{"a":{}, "u":"{}","time":{}}}'.format(
+            action, user.lower(), int(time.time())
+        )
+        iv = get_random_bytes(16)
+
+        # sha
+        h = SHA3_384.new()
+        h.update(key1)
+        hashed_msg = h.digest() + msg.encode()
+
+        # aes
+        cipher = AES.new(key2, AES.MODE_CBC, iv)
+        msg = cipher.encrypt(pad(hashed_msg, 16))
+
+        return base64.b64encode(iv + msg, altchars=b"@$").decode("utf-8")
+    except Exception:
+        return "err"
 
 
 def b64_to_hex(hex: str) -> str:
