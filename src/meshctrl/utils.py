@@ -32,7 +32,7 @@ def get_auth_token(user: str, key: str, domain: str = "") -> str:
     return b64encode(iv + tag + msg, altchars=b"@$").decode("utf-8")
 
 
-def get_login_token(self, key, user, action=3):
+def get_login_token(key, user, action=3):
     try:
         key = bytes.fromhex(key)
         key1 = key[0:48]
